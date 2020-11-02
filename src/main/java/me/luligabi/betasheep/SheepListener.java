@@ -19,7 +19,8 @@ public class SheepListener implements Listener {
 		giveWool(s, s.getColor());
 	}
 	private void giveWool(Sheep s, DyeColor d) {
-		ItemStack wool = new ItemStack(Material.WOOL, 1, d.getData()); //TODO: Add randomized 1-3 wool drop
+		double randomWool = Math.floor(Math.random() * (3 - 1 + 1) + 1); // randomized 1-3 wool drop
+		ItemStack wool = new ItemStack(Material.WOOL, (int) randomWool, d.getData()); 
 		s.setSheared(true);
 		s.getWorld().dropItemNaturally(s.getLocation(), wool); 
 	}
