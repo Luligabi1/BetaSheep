@@ -2,6 +2,7 @@ package me.luligabi.betasheep;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
@@ -12,16 +13,18 @@ import org.bukkit.inventory.ItemStack;
 
 public class SheepListener implements Listener {
 	
+	FileConfiguration cfg = BetaSheep.plugin.getConfig();
+	
 	@EventHandler
-	public void onBetaShearing(EntityDamageByEntityEvent e) { //TODO: Add config to toggle healing the sheep after the hit
+	public void onBetaShearing(EntityDamageByEntityEvent e) { 
 		if(e.getEntityType() != EntityType.SHEEP) return;
 		Sheep s = (Sheep) e.getEntity();
-		if(!s.isAdult()) return;
+		if(!s.isAdult() || s.isSheared()) return;
 		dropWool(s, s.getColor());
 	}
 	@EventHandler
 	public void onVanillaShearing(PlayerShearEntityEvent e) {
-		e.setCancelled(true); //TODO: Add config to toggle vanilla shearing.
+		e.setCancelled(cfg.getBoolean("disableVanillaShearing")); 
 	}
 	private void dropWool(Sheep s, DyeColor d) {
 		double randomWool = Math.floor(Math.random() * (3 - 1 + 1) + 1); // randomized 1-3 wool drop
